@@ -5,7 +5,38 @@
 // 在这个函数中，我们可以拿到ajax提供的配置对象
 $.ajaxPrefilter(function (option) {
   // console.log(option.url);
-   // 在发起真正的 Ajax 请求之前，统一拼接请求的根路径
+  // 在发起真正的 Ajax 请求之前，统一拼接请求的根路径
   option.url = 'http://www.liulongbin.top:3007' + option.url;
   console.log(option.url);
+
+
+
+  // 统一为有权限的接口设置headers请求头 
+  if (option.url.indexOf('/my') !== -1) {
+    option.headers = {
+      Authorization: localStorage.getItem('token') || ''
+    }
+  }
+
+
+  // 控制用户访问权限
+
+  option.complete = function (res) {
+    console.log('执行了complete 回调');
+    console.log(res);
+
+    //  使用res.responseJSON 拿到服务器响应回来的数据
+    if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！') {
+      // 1.强制清空 token
+      localStorage.removeItem('token');
+      // 2. 强制跳转到登录页面
+      location.href = './login.html';
+
+
+    }
+
+  }
+
+
+
 })
