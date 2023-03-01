@@ -22,8 +22,8 @@ $.ajaxPrefilter(function (option) {
   // 控制用户访问权限
 
   option.complete = function (res) {
-    console.log('执行了complete 回调');
-    console.log(res);
+    // console.log('执行了complete 回调');
+    // console.log(res);
 
     //  使用res.responseJSON 拿到服务器响应回来的数据
     if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！') {
